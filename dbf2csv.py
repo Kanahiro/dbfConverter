@@ -1,11 +1,10 @@
 #!/usr/bin/python
 #coding:utf-8
 
-import csv
+import csv,os,sys
+#to be able to deal a huge Database
 csv.field_size_limit(1000000000)
 from dbfpy import dbf
-import os
-import sys
 
 filename = sys.argv[1]
 if filename.endswith('.dbf'):
@@ -28,9 +27,9 @@ elif filename.endswith('.csv'):
   with open(csv_fn, 'rb') as in_csv:
     reader = csv.reader(in_csv)
     out_db = dbf.Dbf(filename[:-4]+'.dbf', new=True)
+    #make database-fields by CSV header
     header = next(reader)
     for col in header:
-      print(col)
       out_db.addField((col,'C',20))
     for row in reader:
       rec = out_db.newRecord()
